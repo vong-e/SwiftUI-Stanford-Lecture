@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     var emojis = ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎", "🚑", "🚒", "🚐", "🛻", "🚚", "🚛", "🚜", "🚲", "🛵", "🏍", "🛺", "🚔", "🚍", "🚘", "🚖", "🚝", "🚞"]
     @State var emojiCount = 6
+    
     var body: some View {
         VStack {
             ScrollView {
