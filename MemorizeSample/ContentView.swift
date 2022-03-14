@@ -7,51 +7,114 @@
 
 import SwiftUI
 
+enum Theme {
+    case vehicle// = "vehicles"
+    case worldFlag// = "worldFlags"
+    case heartSymbol// = "heartSymbols"
+}
+
 struct ContentView: View {
-    var emojis = ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎", "🚑", "🚒", "🚐", "🛻", "🚚", "🚛", "🚜", "🚲", "🛵", "🏍", "🛺", "🚔", "🚍", "🚘", "🚖", "🚝", "🚞"]
-    @State var emojiCount = 6
+    @State var vehicles = ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎", "🚑", "🚒", "🚐", "🛻", "🚚", "🚛", "🚜", "🚲", "🛵", "🏍", "🛺", "🚔", "🚍", "🚘", "🚖", "🚝", "🚞"]
+    
+    @State var worldFlags = ["🇰🇷", "🇹🇼", "🇩🇰", "🇳🇷", "🇳🇬", "🇬🇳", "🇬🇲", "🏳️‍🌈", "🏳️‍⚧️", "🇲🇬", "🇱🇮", "🇲🇴", "🇲🇼", "🇲🇾", "🇲🇭"]
+    
+    
+    @State var heartSymbols = ["❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎", "💔", "❤️‍🔥", "❤️‍🩹", "❣️", "💕", "💞", "💓", "💗", "💟"]
+    
+//    @State var emojiCount = 6
+    @State var selectedTheme: Theme = .vehicle
+    
     
     var body: some View {
         VStack {
+            Text("Memorize!")
+                .font(.title)
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
-                    ForEach(emojis[0..<emojiCount], id: \.self ) { emoji in
-                        CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
+                    switch selectedTheme {
+                    case .vehicle:
+                        ForEach(vehicles[0..<vehicles.count], id: \.self ) { emoji in
+                            CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
+                        }
+                    case .worldFlag:
+                        ForEach(worldFlags[0..<worldFlags.count], id: \.self ) { emoji in
+                            CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
+                        }
+                    case .heartSymbol:
+                        ForEach(heartSymbols[0..<heartSymbols.count], id: \.self ) { emoji in
+                            CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
+                        }
                     }
                 }
             }
             .foregroundColor(.red)
             Spacer()
             HStack {
-                remove
-                Spacer()
-                add
+                vehicleThemeButton
+                worldFlagThemeButton
+                heartSymbolThemeButton
             }
             .font(.largeTitle)
-            .padding(.horizontal)
         }
         .padding(.horizontal)
     }
     
-    var remove: some View {
+    var vehicleThemeButton: some View {
         Button {
-            if emojiCount > 1 {
-                emojiCount -= 1
-            }
+            vehicles.shuffle()
+            selectedTheme = .vehicle
         } label: {
-            Image(systemName: "minus.circle")
+            VStack {
+                Image(systemName: "car")
+                Text("Flag").font(.body)
+            }
         }
     }
     
-    var add: some View {
+    var worldFlagThemeButton: some View {
         Button {
-            if emojiCount < emojis.count {
-                emojiCount += 1
-            }
+            worldFlags.shuffle()
+            selectedTheme = .worldFlag
         } label: {
-            Image(systemName: "plus.circle")
+            VStack {
+                Image(systemName: "flag")
+                Text("Flag").font(.body)
+            }
         }
     }
+    
+    var heartSymbolThemeButton: some View {
+        Button {
+            heartSymbols.shuffle()
+            selectedTheme = .heartSymbol
+        } label: {
+            VStack {
+                Image(systemName: "heart")
+                Text("heart").font(.body)
+            }
+        }
+    }
+    
+    
+//    var remove: some View {
+//        Button {
+//            if emojiCount > 1 {
+//                emojiCount -= 1
+//            }
+//        } label: {
+//            Image(systemName: "minus.circle")
+//        }
+//    }
+//
+//    var add: some View {
+//        Button {
+//            if emojiCount < vehicles.count {
+//                emojiCount += 1
+//            }
+//        } label: {
+//            Image(systemName: "plus.circle")
+//        }
+//    }
 }
 
 struct CardView: View {
