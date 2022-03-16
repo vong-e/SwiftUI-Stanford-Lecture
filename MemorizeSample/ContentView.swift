@@ -17,7 +17,7 @@ struct ContentView: View {
 //    @State var worldFlags = ["🇰🇷", "🇹🇼", "🇩🇰", "🇳🇷", "🇳🇬", "🇬🇳", "🇬🇲", "🏳️‍🌈", "🏳️‍⚧️", "🇲🇬", "🇱🇮", "🇲🇴", "🇲🇼", "🇲🇾", "🇲🇭"]
 //    @State var heartSymbols = ["❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎", "💔", "❤️‍🔥", "❤️‍🩹", "❣️", "💕", "💞", "💓", "💗", "💟"]
     
-    let viewModel: EmojiMemoryGame
+    @ObservedObject var viewModel: EmojiMemoryGame
     
     var body: some View {
         ScrollView {
