@@ -14,87 +14,26 @@ enum Theme {
 }
 
 struct ContentView: View {
-    @State var vehicles = ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎", "🚑", "🚒", "🚐", "🛻", "🚚", "🚛", "🚜", "🚲", "🛵", "🏍", "🛺", "🚔", "🚍", "🚘", "🚖", "🚝", "🚞"]
+//    @State var worldFlags = ["🇰🇷", "🇹🇼", "🇩🇰", "🇳🇷", "🇳🇬", "🇬🇳", "🇬🇲", "🏳️‍🌈", "🏳️‍⚧️", "🇲🇬", "🇱🇮", "🇲🇴", "🇲🇼", "🇲🇾", "🇲🇭"]
+//    @State var heartSymbols = ["❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎", "💔", "❤️‍🔥", "❤️‍🩹", "❣️", "💕", "💞", "💓", "💗", "💟"]
     
-    @State var worldFlags = ["🇰🇷", "🇹🇼", "🇩🇰", "🇳🇷", "🇳🇬", "🇬🇳", "🇬🇲", "🏳️‍🌈", "🏳️‍⚧️", "🇲🇬", "🇱🇮", "🇲🇴", "🇲🇼", "🇲🇾", "🇲🇭"]
-    
-    
-    @State var heartSymbols = ["❤️", "🧡", "💛", "💚", "💙", "💜", "🖤", "🤍", "🤎", "💔", "❤️‍🔥", "❤️‍🩹", "❣️", "💕", "💞", "💓", "💗", "💟"]
-    
-//    @State var emojiCount = 6
-    @State var selectedTheme: Theme = .vehicle
-    
+    let viewModel: EmojiMemoryGame
     
     var body: some View {
-        VStack {
-            Text("Memorize!")
-                .font(.title)
-            ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
-                    switch selectedTheme {
-                    case .vehicle:
-                        ForEach(vehicles[0..<vehicles.count], id: \.self ) { emoji in
-                            CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
+        ScrollView {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 65))]) {
+                ForEach(viewModel.cards) { card in
+                    CardView(card: card)
+                        .aspectRatio(2/3, contentMode: .fit)
+                        .onTapGesture {
+                            viewModel.choose(card)
                         }
-                    case .worldFlag:
-                        ForEach(worldFlags[0..<worldFlags.count], id: \.self ) { emoji in
-                            CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
-                        }
-                    case .heartSymbol:
-                        ForEach(heartSymbols[0..<heartSymbols.count], id: \.self ) { emoji in
-                            CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
-                        }
-                    }
                 }
             }
-            .foregroundColor(.red)
-            Spacer()
-            HStack {
-                vehicleThemeButton
-                worldFlagThemeButton
-                heartSymbolThemeButton
-            }
-            .font(.largeTitle)
         }
+        .foregroundColor(.red)
         .padding(.horizontal)
     }
-    
-    var vehicleThemeButton: some View {
-        Button {
-            vehicles.shuffle()
-            selectedTheme = .vehicle
-        } label: {
-            VStack {
-                Image(systemName: "car")
-                Text("Flag").font(.body)
-            }
-        }
-    }
-    
-    var worldFlagThemeButton: some View {
-        Button {
-            worldFlags.shuffle()
-            selectedTheme = .worldFlag
-        } label: {
-            VStack {
-                Image(systemName: "flag")
-                Text("Flag").font(.body)
-            }
-        }
-    }
-    
-    var heartSymbolThemeButton: some View {
-        Button {
-            heartSymbols.shuffle()
-            selectedTheme = .heartSymbol
-        } label: {
-            VStack {
-                Image(systemName: "heart")
-                Text("heart").font(.body)
-            }
-        }
-    }
-    
     
 //    var remove: some View {
 //        Button {
@@ -118,31 +57,28 @@ struct ContentView: View {
 }
 
 struct CardView: View {
-    var content: String
-    @State var isFaceUp: Bool = true
-    
+    let card: MemoryGame<String>.Card
+     
     var body: some View {
         ZStack {
             let shape  = RoundedRectangle(cornerRadius: 25)
-            if isFaceUp {
+            if card.isFaceUp {
                 shape.fill().foregroundColor(.white)
                 shape.strokeBorder(lineWidth: 3)
-                Text(content).font(.largeTitle)
+                Text(card.content).font(.largeTitle)
             } else {
                 shape.fill()
             }
-        }
-        .onTapGesture {
-            isFaceUp = !isFaceUp
         }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        let game = EmojiMemoryGame()
+        ContentView(viewModel: game)
             .preferredColorScheme(.dark)
-//        ContentView()
-//            .preferredColorScheme(.light)
+        ContentView(viewModel: game)
+            .preferredColorScheme(.light)
     }
 }
