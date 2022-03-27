@@ -42,3 +42,5 @@ struct MemoryGame<CardContent> {
         var id: Int
     }
 }
+
+lecture4 47'
